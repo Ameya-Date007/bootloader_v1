@@ -64,11 +64,13 @@ int main(void) {
       start_time = system_get_ticks();
     }
 
-    if(uart_data_available()){
+    while(uart_data_available()){
       uint8_t data = uart_read_byte();
       // Echo the received data
       uart_write_byte(data+1);
     }
+
+    system_delay(1000);
   }
   // Never return
   return 0;
