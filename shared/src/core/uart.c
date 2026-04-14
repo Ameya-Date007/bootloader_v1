@@ -15,7 +15,7 @@ void usart1_isr(void){
     const bool received_data = usart_get_flag(USART1, USART_FLAG_RXNE) == 1;
 
     if(received_data || overrun_occurred){
-        if(ring_buffer_write(&rb, (uint8_t) usart_recv(USART2))){
+        if(ring_buffer_write(&rb, (uint8_t) usart_recv(USART1))){
 
         }
     }
