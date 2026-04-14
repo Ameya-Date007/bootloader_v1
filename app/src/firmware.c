@@ -10,8 +10,8 @@
 // UART PORT DEFINITIONS //
 
 #define UART_PORT (GPIOA)
-#define UART_RX_PIN (GPIO3)
-#define UART_TX_PIN (GPIO2)
+#define UART_RX_PIN (GPIO10)
+#define UART_TX_PIN (GPIO9)
 
 ///////////////////////////
 
