@@ -32,7 +32,7 @@ void system_delay(uint32_t milliseconds){
     while (system_get_ticks() < end_time)
     {
         // Busy wait.
-        //__asm__("nop");
+        __asm__("nop");
     }
     
 }
