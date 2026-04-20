@@ -5,12 +5,16 @@ Week 1 (April 13 - 17). Establish communication between Raspberry Pi and STM32 N
     --> Writing a python script for Raspberry Pi to communicate with STM32 Nucleo, with all wiring done correctly, transfer single byte at a time, intially.
     --> Design a packet format which will be essential while transmitting the firmware file from Raspberry pi to STM32.
 
-    Day 1, April 13
+    Day 1, April 13 (Happened on April 17th)
         --> Completion of UART driver and python script. [DONE]
         --> Testing single character transfer, one at a time. [DONE]
 
-    Day 2, April 14 (pending)
-        --> Design a packet format for UART protocol, to transfer data in chunks. []
+    Day 2, April 14 (pending) (Done on April 18th)
+        --> Design a packet format for UART protocol, to transfer data in chunks. [DONE]
+
+    Day 3, April 21    
+        --> Testing the packet state machine, using typescript. (See how to setup the typescript environment and copy the code written for testing).
+        --> Begin with programmatic flash control.
 
 
 
