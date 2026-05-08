@@ -33,7 +33,7 @@ static bool is_single_byte_packet(const comm_packet_t * packet, uint8_t byte){
         return false;
     }
     
-    for (uint8_t i = 0; i < PACKET_DATA_LENGTH; i++){
+    for (uint8_t i = 1; i < PACKET_DATA_LENGTH; i++){
         if(packet ->data[i] != 0xff){
             return false;
         }
@@ -43,7 +43,7 @@ static bool is_single_byte_packet(const comm_packet_t * packet, uint8_t byte){
 
 static void copy_packet(const comm_packet_t * source, comm_packet_t * dest){
     dest -> length = source -> length;
-    for (uint8_t i = 1; i < PACKET_DATA_LENGTH; i++){
+    for (uint8_t i = 0; i < PACKET_DATA_LENGTH; i++){
         dest -> data[i] = source -> data[i];
     }
     dest -> crc = source -> crc;
@@ -70,17 +70,20 @@ void comm_update(void){
     while(uart_data_available()){
         switch (state)
         {
-        case COMM_STATE_LENGTH:
+        case COMM_STATE_LENGTH:{
             temp_packet.length = uart_read_byte();
             state = COMM_STATE_DATA;
             break;
-
-        case COMM_STATE_DATA:
+        }
+        case COMM_STATE_DATA:{
             temp_packet.data[data_byte_count++] = uart_read_byte();
-            if(data_byte_count >= PACKET_DATA_LENGTH)
+            if(data_byte_count >= PACKET_DATA_LENGTH){
+            data_byte_count = 0;
             state = COMM_STATE_CRC;
+            }
             break;
-        case COMM_STATE_CRC:
+        }
+        case COMM_STATE_CRC:{
             temp_packet.crc = uart_read_byte();
 
             if(temp_packet.crc != comm_compute_crc(&temp_packet)){
@@ -99,25 +102,29 @@ void comm_update(void){
                 state = COMM_STATE_LENGTH;
                 break;
             }
-            else{
-                uint32_t next_write_idx = (write_idx + 1) &packet_buffer_mask;
+                uint32_t next_write_idx = (write_idx + 1) & packet_buffer_mask;
+
+                if (next_write_idx == read_idx) {
+                    __asm__("BKPT #0");
+                }
+
                 copy_packet(&temp_packet, &packet_buffer[write_idx]);
                 write_idx = next_write_idx;
                 comm_send_packet(&ack_packet);
-            }
-
+                state = COMM_STATE_LENGTH;
             break;
+        }
         default:
         state = COMM_STATE_LENGTH;
             break;
         }
     }
 }
-void packets_available(void){
+bool packets_available(void){
     return write_idx != read_idx;
 }
 void comm_send_packet(const comm_packet_t* packet){
-    uart_write((uint8_t) packet, PACKET_SIZE);
+    uart_write((uint8_t*) packet, PACKET_SIZE);
     copy_packet(packet, &last_tx_packet);
 }
 void comm_receive_packet(comm_packet_t * packet){
@@ -125,5 +132,5 @@ void comm_receive_packet(comm_packet_t * packet){
     read_idx = (read_idx + 1) & packet_buffer_mask;
 }
 uint8_t comm_compute_crc(comm_packet_t * packet){
-    return crc8((uint8_t)packet, PACKET_SIZE - PACKET_CRC_BYTES);
+    return crc8((uint8_t*)packet, PACKET_SIZE - PACKET_CRC_BYTES);
 }

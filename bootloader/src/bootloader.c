@@ -40,8 +40,23 @@ int main(void) {
   uart_setup();
   comm_setup();
 
+  comm_packet_t packet = {
+    .length = 9,
+    .data = {1,2,3,4,5,6,7,8,9,0xff,0xff,0xff,0xff,0xff,0xff,0xff},
+    .crc = 0
+  };
+  packet.crc = comm_compute_crc(&packet);
+
+  comm_packet_t rx_packet;
+
   while (1)
   {
+    comm_update();
+
+    if(packets_available()){
+      comm_receive_packet(&rx_packet);
+    }
+    comm_send_packet(&packet);
     system_delay(500);
   }
 

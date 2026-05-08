@@ -19,7 +19,7 @@ typedef struct comms_packet_t{
 
 void comm_setup(void);
 void comm_update(void);
-void packets_available(void);
+bool packets_available(void);
 void comm_send_packet(const comm_packet_t* packet);
 void comm_receive_packet(comm_packet_t * packet);
 uint8_t comm_compute_crc(comm_packet_t * packet);

@@ -2,8 +2,10 @@
   "configurations": [
     {
       "name": "Debug Application",
-      "cwd": "${workspaceFolder}/app",
-      "executable": "./firmware.elf",
+      //"cwd": "${workspaceFolder}/app",
+      "cwd": "${workspaceFolder}/bootloader",
+      //"executable": "./firmware.elf",
+      "executable": "./bootloader.elf",
       "serverpath": "/home/ad/embedded_stm32_setup/st_link/usr/bin/st-util",
       "servertype": "stutil",
       "request": "launch",
@@ -15,8 +17,10 @@
     },
     {
       "name": "Attach to active",
-      "cwd": "${workspaceFolder}/app",
-      "executable": "./firmware.elf",
+      //"cwd": "${workspaceFolder}/app",
+      "cwd": "${workspaceFolder}/bootloader",
+      //"executable": "./firmware.elf",
+      "executable": "./bootloader.elf",
       "serverpath": "/home/ad/embedded_stm32_setup/st_link/usr/bin/st-util",
       "servertype": "stutil",
       "request": "attach",
