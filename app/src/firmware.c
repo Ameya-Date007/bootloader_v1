@@ -70,7 +70,7 @@ int main(void) {
       // Echo the received data, sort of a feedback, from the target node to the host. Therfore, given the uart_write_byte function (blocking).
         uart_write_byte(data+1);
       }
-      system_delay(1000);
+      //system_delay(1000);
     }
   // Never return
   return 0;

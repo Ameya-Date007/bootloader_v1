@@ -16,10 +16,21 @@ Week 1 (April 13 - 17). Establish communication between Raspberry Pi and STM32 N
         --> Testing the packet state machine, using typescript. (See how to setup the typescript environment and copy the code written for testing).
         --> Begin with programmatic flash control.
 
+    May 9--------
+    Programmatic Flash Control complete, it requires unlocking flash memory and locking it after performing any read/write op. It uses Flash control register to start programming the flash memory, done after reading the busy status register for flash memory. The steps required for it is mentioned in section 3 of RM0368 documention (Reference Manual).
 
+    Also completed a simple timer API abstraction, which will be required further. For this, the systick handler is used, which is already defined in system.c. Setup, reset functions were written for the timer.
 
+    May 10
+    Completed the firmware update mechanism!! The fw-updater is written in typescript.
+    Learnings: How is handshake signal given? Through means of single packet.
+               --> STM32 : acknowledges sync packet from client, sends requests and responses to the requests made by client.
+               --> Raspberry Pi: Does the exact opposite of the target node.
+                 * Timeout at every step is necessary, so whenever we are in a new state, we have to reset the timer after we have received any packet from Raspberry Pi.
+                 * If the transmission fails, the timer will be elapsed past the max limit, and will jump to the main function.
+                 * I by mistake, after erasing the main application data, didn't sent the READY_FOR_DATA packet, which caused timeout on my client side fw-updater. That is now resolved.
 
-
+    
 NOTES/CONCEPTS
 1)  Why Ring Buffer? (Or Circular Buffer)
 --> As compared to current case, where only a single byte is used to store the character, it might be possible that when the interrupt is given, it might be possible that the previous data

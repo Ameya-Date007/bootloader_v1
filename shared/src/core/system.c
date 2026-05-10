@@ -27,6 +27,12 @@ void system_setup(void) {
     systick_setup();
 }
 
+void system_teardown(void){
+    systick_counter_disable();
+    systick_interrupt_disable();
+    systick_clear();
+}
+
 void system_delay(uint32_t milliseconds){
     uint64_t end_time = system_get_ticks() + milliseconds;
     while (system_get_ticks() < end_time)

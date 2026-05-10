@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "name": "Debug Application",
+      "name": "Debug Application: Bootloader",
       //"cwd": "${workspaceFolder}/app",
       "cwd": "${workspaceFolder}/bootloader",
       //"executable": "./firmware.elf",
@@ -21,6 +21,31 @@
       "cwd": "${workspaceFolder}/bootloader",
       //"executable": "./firmware.elf",
       "executable": "./bootloader.elf",
+      "serverpath": "/home/ad/embedded_stm32_setup/st_link/usr/bin/st-util",
+      "servertype": "stutil",
+      "request": "attach",
+      "type": "cortex-debug",
+      "device": "STM32F401RE",
+      "runToEntryPoint": "main",
+      "interface": "swd",
+    },
+    {
+      "name": "Debug Application: Firmware",
+      "cwd": "${workspaceFolder}/app",
+      "executable": "./firmware.elf",
+      "serverpath": "/home/ad/embedded_stm32_setup/st_link/usr/bin/st-util",
+      "servertype": "stutil",
+      "request": "launch",
+      "type": "cortex-debug",
+      "device": "STM32F401RE",
+      "runToEntryPoint": "main",
+      "interface": "swd",
+      "preLaunchTask": "build_debug"
+    },
+    {
+      "name": "Attach to active",
+      "cwd": "${workspaceFolder}/app",
+      "executable": "./firmware.elf",
       "serverpath": "/home/ad/embedded_stm32_setup/st_link/usr/bin/st-util",
       "servertype": "stutil",
       "request": "attach",
