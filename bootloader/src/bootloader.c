@@ -3,11 +3,14 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/cm3/vector.h>
+#include <libopencm3/cm3/scb.h>
 #include "core/system.h"
 #include "bl-flash.h"
 #include "core/simple-timer.h"
 #include "core/uart.h"
 #include "comm.h"
+#include "core/firmware-info.h"
+#include "core/crc.h"
 
 #define BOOTLOADER_SIZE (0x8000U) // 32KB ----> 1000 0000 0000 0000
 #define MAIN_APP_START_ADDRESS (FLASH_BASE + BOOTLOADER_SIZE) // BASE ADDRESS OF FLASH MEM: 0x0800_0000
@@ -69,6 +72,19 @@ static void jump_to_main(void){
   vector_table_t * main_vector_table = (vector_table_t *) MAIN_APP_START_ADDRESS;
   main_vector_table -> reset(); // Calls the reset handler of the main application.
 
+}
+
+static bool validate_firmware_image(void){
+  firmware_info_t* firmware_info = (firmware_info_t*)FWINFO_ADDRESS;
+  if(firmware_info -> sentinel != FWINFO_SENTINEL){
+    return false;
+  }
+  if(firmware_info -> device_id != DEVICE_ID){
+    return false;
+  }
+  const uint8_t* start_address = (uint8_t*) FWINFO_VALIDATE_FROM;
+  const uint32_t computed_crc = crc32(start_address, FWINFO_VALIDATE_LENGTH(firmware_info -> length));
+  return computed_crc == firmware_info -> crc32;
 }
 
 static bool is_device_id_packet(const comm_packet_t * packet){
@@ -320,6 +336,11 @@ int main(void) {
   gpio_teardown();
   system_teardown();
 
-  jump_to_main();
+  if(validate_firmware_image()){
+    jump_to_main();
+  }
+  else{
+    scb_reset_core();
+  }
   return 0;
 }

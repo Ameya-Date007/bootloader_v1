@@ -1,6 +1,6 @@
 #include "comm.h"
 #include "core/uart.h"
-#include "core/crc8.h"
+#include "core/crc.h"
 #include <string.h>
 
 #define PACKET_BUFF_LENGTH (8)
