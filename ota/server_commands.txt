@@ -1,0 +1,14 @@
+# Check if it is running and see recent logs
+sudo systemctl status ota-server
+
+# See the full live log output
+sudo journalctl -u ota-server -f
+
+# Stop the server
+sudo systemctl stop ota-server
+
+# Restart after making changes
+sudo systemctl restart ota-server
+
+# Disable autostart on boot
+sudo systemctl disable ota-server

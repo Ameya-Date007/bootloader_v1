@@ -1,0 +1,6 @@
+RAW_DIR=/home/ameya/ota/uploads/raw
+SIGNED_DIR=/home/ameya/ota/uploads/signed
+FLASHER_DIR=/home/ameya/ota/flasher
+API_KEY=test001
+SIGNING_KEY=000102030405060708090a0b0c0d0e0f
+
